@@ -20,36 +20,37 @@ double GetNumericInput(std::string message);
 //checks if given string is numeric
 bool IsNumeric(std::string givenString);
 
+//replaces comma with point
+void ReplaceCommaToPoint(std::string& givenString);
+
 //gets to closets number divisible by 16
 int GetToClosets16Multiple(int givenNumber);
 
 
-int main()
-{
-	while (true)
-	{
+int main(){
+	while (true){
 		int x, z;
 
-		std::cout << "enter your coordinates when you are on the chunk with treasure\n";
+		std::cout << "enter your coordinates when you are in the middle of the X mark in treasure map\n";
 		
 		x = GetToClosets16Multiple((int) GetNumericInput("x = "));
 		z = GetToClosets16Multiple((int) GetNumericInput("z = "));
 
-		std::cout << "Chest is at " << (x + 8) << " " << (z + 8) << "\n\n";
+		std::cout << "Chest is at x = " << (x + 8) << "; z = " << (z + 8) << "\n\n";
 	}
     
 }
 
 //gets numeric input
-double GetNumericInput(std::string message)
-{
+double GetNumericInput(std::string message){
 	while (true)
 	{
 		std::string givenInput;
 		std::cout << message;
-		std::cin >> givenInput;
+		std::getline(std::cin, givenInput);
 
 		if (IsNumeric(givenInput)) {
+			ReplaceCommaToPoint(givenInput);
 			return std::stod(givenInput);
 		}
 		else {
@@ -59,8 +60,7 @@ double GetNumericInput(std::string message)
 }
 
 //checks if given string is numeric
-bool IsNumeric(std::string givenString)
-{
+bool IsNumeric(std::string givenString){
 	unsigned int pointCounter = 0;	//counter for how many times point char is met in given string
 
 	//checking if last char is point
@@ -85,6 +85,7 @@ bool IsNumeric(std::string givenString)
 			continue;
 
 		case '.':
+		case ',':
 			pointCounter++;
 			if (pointCounter > 1) {
 				return false;
@@ -99,9 +100,17 @@ bool IsNumeric(std::string givenString)
 	return true;
 }
 
+//replaces comma with point
+void ReplaceCommaToPoint(std::string& givenString){
+	for (unsigned int i = 0; i < givenString.size(); i++) {
+		if (givenString[i] == ',') {
+			givenString[i] = '.';
+		}
+	}
+}
+
 //gets to closets number divisible by 16
-int GetToClosets16Multiple(int givenNumber)
-{
+int GetToClosets16Multiple(int givenNumber){
 	//readjusting given number to higher level of 16 multiple if negative
 	if (givenNumber < 0) {
 		givenNumber -= 16;
